@@ -1,0 +1,38 @@
+#define _GNU_SOURCE
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5000
+
+typedef struct coord
+{
+    float x;
+    float y;
+    
+} coord;
+
+int main(int argc, char* argv[])
+{
+    if (argc != 2)
+        exit(1);
+    char* filename = argv[1];
+
+    char* line = NULL;
+    int n = 0;
+
+    FILE* coordFile = fopen(filename, "r");
+
+    coord* coords = (coord*) malloc(sizeof(coord) * MAX);
+    if (coords == NULL)
+        exit(3);
+    int i = 0;
+
+    while (getline(&line,&n, coordFile) != -1 && i < MAX)
+    {
+        int items = sscanf(line, "%f %f %f", &coords[i].x, &coords[i].y);
+        if (items != 3)
+            exit(2);
+        i++;
+    }
+    fclose(coordFile);
+}
